@@ -18,7 +18,8 @@ namespace OrderService.Services
 
         public void PlaceOrder(Order order)
         {
-            _packingSlipService.GeneratePackingSlip(order);
+            if (order.IsPhysical)
+                _packingSlipService.GeneratePackingSlip(order);
         }
     }
 }

@@ -7,14 +7,14 @@ using System;
 namespace OrderServiceTest
 {
     [TestClass]
-    public class OrderServicePaymentTest
+    public class OrderHandlingServiceTest
     {
         //If the payment is for a physical product, generate a packing slip for shipping.
         [TestMethod]
         public void PhysicalProduct_PackingSlipCreated()
         {
             string originalAddress = Guid.NewGuid().ToString();
-            Order order = new Order { IsPhysical = true, ShippingAddress = originalAddress };
+            Order order = new Order { ProductType = ProductType.Unspecified, ShippingAddress = originalAddress };
             string address = null;
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>())).Callback<Order>((o) => address = o.ShippingAddress);
@@ -32,7 +32,7 @@ namespace OrderServiceTest
         [TestMethod]
         public void NotPhysicalProduct_NoPackingSlipCreated()
         {
-            Order order = new Order { IsPhysical = false };
+            Order order = new Order { ProductType = ProductType.Membership };
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
 
             OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
