@@ -8,6 +8,13 @@ namespace OrderService.Services
 {
     public class OrderHandlingService : IOrderHandlingService
     {
+        private readonly IPackingSlipService _packingSlipService;
+
+        public OrderHandlingService(IPackingSlipService packingSlipService)
+        {
+            _packingSlipService = packingSlipService;
+        }
+
         public void PlaceOrder(Order order)
         {
             throw new NotImplementedException();

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OrderService.Models;
 using OrderService.Services;
+using Moq;
 
 namespace OrderServiceTest
 {
@@ -12,9 +13,9 @@ namespace OrderServiceTest
         public void PhysicalProduct_PackingSlipCreated()
         {
             Order order = new Order { IsPhysical = true };
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
 
-            OrderHandlingService sut = new OrderHandlingService();
-
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify that we create a packing slip
