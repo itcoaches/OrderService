@@ -17,13 +17,13 @@ namespace OrderServiceTest
             Order order = new Order { ProductType = ProductType.Unspecified, ShippingAddress = originalAddress };
             string address = null;
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
-            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>())).Callback<Order>((o) => address = o.ShippingAddress);
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
 
             OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we created a packing slip
-            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>()), Times.Once);
+            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()), Times.Once);
             
             // verify the correct address was passed through...we might do that in a separate test but here for now
             Assert.AreEqual(originalAddress, address, "address");
@@ -39,14 +39,27 @@ namespace OrderServiceTest
             sut.PlaceOrder(order);
 
             // verify we did not create a packing slip
-            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>()), Times.Never);
+            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()), Times.Never);
 
         }
         //If the payment is for a book, create a duplicate packing slip for the royalty department.
         [TestMethod]
         public void Book_RoyaltyPackingSlipCreated()
         {
-            Assert.Inconclusive();
+            string originalAddress = Guid.NewGuid().ToString();
+            Order order = new Order { ProductType = ProductType.Book, ShippingAddress = originalAddress };
+            string address = null;
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
+
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
+            sut.PlaceOrder(order);
+
+            // verify we created 2 packing slips
+            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()), Times.Exactly(2));
+
+            // verify the royalty dept address
+            Assert.AreEqual(OrderHandlingService.RoyaltyDepartment, address, "address");
         }
         //If the payment is for a membership, activate that membership.
         [TestMethod]
