@@ -29,6 +29,7 @@ namespace OrderService
             services.AddControllers();
             services.AddScoped<IPackingSlipService, PackingSlipService>();
             services.AddScoped<IOrderHandlingService, OrderHandlingService>();
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +39,9 @@ namespace OrderService
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrderService V1"));
 
             app.UseHttpsRedirection();
 
