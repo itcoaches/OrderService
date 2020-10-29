@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace OrderService.Services
 {
-    public class OrderService : IOrderService
+    public interface IOrderHandlingService
     {
-        public void PlaceOrder(Order order)
-        {
-            throw new NotImplementedException();
-        }
+        void PlaceOrder(Order order);
     }
 }

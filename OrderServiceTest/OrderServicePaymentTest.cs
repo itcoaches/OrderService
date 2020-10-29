@@ -1,4 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OrderService.Models;
+using OrderService.Services;
 
 namespace OrderServiceTest
 {
@@ -9,6 +11,14 @@ namespace OrderServiceTest
         [TestMethod]
         public void PhysicalProduct_PackingSlipCreated()
         {
+            Order order = new Order { IsPhysical = true };
+
+            OrderHandlingService sut = new OrderHandlingService();
+
+            sut.PlaceOrder(order);
+
+            // verify that we create a packing slip
+
             Assert.Inconclusive();
         }
         //If the payment is for a book, create a duplicate packing slip for the royalty department.
