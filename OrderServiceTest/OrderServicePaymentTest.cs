@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OrderService.Models;
 using OrderService.Services;
 using Moq;
+using System;
 
 namespace OrderServiceTest
 {
@@ -12,15 +13,34 @@ namespace OrderServiceTest
         [TestMethod]
         public void PhysicalProduct_PackingSlipCreated()
         {
-            Order order = new Order { IsPhysical = true };
+            string originalAddress = Guid.NewGuid().ToString();
+            Order order = new Order { IsPhysical = true, ShippingAddress = originalAddress };
+            string address = null;
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>())).Callback<Order>((o) => address = o.ShippingAddress);
+
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
+            sut.PlaceOrder(order);
+
+            // verify we created a packing slip
+            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>()), Times.Once);
+            
+            // verify the correct address was passed through...we might do that in a separate test but here for now
+            Assert.AreEqual(originalAddress, address, "address");
+        }
+
+        [TestMethod]
+        public void NotPhysicalProduct_NoPackingSlipCreated()
+        {
+            Order order = new Order { IsPhysical = false };
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
 
             OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
             sut.PlaceOrder(order);
 
-            // verify that we create a packing slip
+            // verify we did not create a packing slip
+            packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>()), Times.Never);
 
-            Assert.Inconclusive();
         }
         //If the payment is for a book, create a duplicate packing slip for the royalty department.
         [TestMethod]
