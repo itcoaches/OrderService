@@ -35,8 +35,12 @@ namespace OrderServiceTest
         {
             Order order = new Order { ProductType = ProductType.Membership };
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we did not create a packing slip
@@ -69,8 +73,10 @@ namespace OrderServiceTest
             Order order = new Order { ProductType = ProductType.Membership };
             Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
             membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we activated a membership
@@ -83,8 +89,10 @@ namespace OrderServiceTest
             Order order = new Order { ProductType = ProductType.MembershipUpgrade };
             Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
             membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we activated a membership
@@ -100,7 +108,7 @@ namespace OrderServiceTest
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we sent an email
@@ -111,11 +119,11 @@ namespace OrderServiceTest
         {
             Order order = new Order { ProductType = ProductType.MembershipUpgrade };
             Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
-            membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we sent an email
