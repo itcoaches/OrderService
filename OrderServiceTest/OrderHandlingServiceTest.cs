@@ -133,7 +133,20 @@ namespace OrderServiceTest
         [TestMethod]
         public void SkiVideo_AddFirstAidVideo()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.Video, ProductName = "Learning to Ski" };
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            string specialInstructions = "Remember to add the First Aid video";
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object);
+            sut.PlaceOrder(order);
+
+            // verify we added special instructions to add the first aid video
+            Assert.AreEqual(specialInstructions, order.SpecialInstructions);
         }
         //If the payment is for a physical product or a book, generate a commission payment to the agent.
         [TestMethod]

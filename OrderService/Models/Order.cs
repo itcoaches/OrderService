@@ -22,7 +22,8 @@ namespace OrderService.Models
         public bool IsPhysical { get { return (int)this.ProductType < 99; } }   // TODO: a bit smelly ?
         public string ProductName { get; set; }
         public double Price { get; set; }
-        
+       
         public string ShippingAddress { get; set; }
+        public string SpecialInstructions { get; set; }
     }
 }
