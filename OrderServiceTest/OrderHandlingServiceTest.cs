@@ -184,25 +184,25 @@ namespace OrderServiceTest
             // verify we created a commission payment
             commissionServiceMock.Verify(m => m.CreateCommissionPayment(It.IsAny<Order>()), Times.Once);
         }
-        [TestMethod]
-        public void Book_CommissionPaymentCreated()
-        {
-            Order order = new Order { ProductType = ProductType.Book};
-            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
-            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
-            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
-            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
-            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
-            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
-            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
-            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
+        //[TestMethod]
+        //public void Book_CommissionPaymentCreated()
+        //{
+        //    Order order = new Order { ProductType = ProductType.Book};
+        //    Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+        //    packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
+        //    Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+        //    membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+        //    Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+        //    emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+        //    Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+        //    commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
-            sut.PlaceOrder(order);
+        //    OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
+        //    sut.PlaceOrder(order);
 
-            // verify we created a commission payment
-            commissionServiceMock.Verify(m => m.CreateCommissionPayment(It.IsAny<Order>()), Times.Once);
-        }
+        //    // verify we created a commission payment
+        //    commissionServiceMock.Verify(m => m.CreateCommissionPayment(It.IsAny<Order>()), Times.Once);
+        //}
 
         // TODO: what about Video? maybe needs commission payment too
     }
