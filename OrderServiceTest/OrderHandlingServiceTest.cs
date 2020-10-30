@@ -66,13 +66,29 @@ namespace OrderServiceTest
         [TestMethod]
         public void MembershipNew_MembershipActivated()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.Membership };
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            sut.PlaceOrder(order);
+
+            // verify we activated a membership
+            membershipServiceMock.Verify(m => m.ActivateMembership(It.IsAny<Order>()), Times.Once);
         }
         //If the payment is an upgrade to a membership, apply the upgrade.
         [TestMethod]
         public void MembershipUpgrade_UpgradeApplied()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.MembershipUpgrade };
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            sut.PlaceOrder(order);
+
+            // verify we activated a membership
+            membershipServiceMock.Verify(m => m.UpgradeMembership(It.IsAny<Order>()), Times.Once);
         }
         //If the payment is for a membership or upgrade, e-mail the owner and inform them of the activation/upgrade.
         [TestMethod]
