@@ -21,6 +21,7 @@ namespace OrderServiceTest
 
             OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
             sut.PlaceOrder(order);
+            // TODO: we have a similar pattern in the following tests - refactor the above lines into a test helper class
 
             // verify we created a packing slip
             packingSlipServiceMock.Verify(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()), Times.Once);

@@ -28,6 +28,8 @@ namespace OrderService
         {
             services.AddControllers();
             services.AddScoped<IPackingSlipService, PackingSlipService>();
+            services.AddScoped<IMembershipService, MembershipService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IOrderHandlingService, OrderHandlingService>();
             services.AddSwaggerGen();
         }
