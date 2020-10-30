@@ -30,6 +30,7 @@ namespace OrderService
             services.AddScoped<IPackingSlipService, PackingSlipService>();
             services.AddScoped<IMembershipService, MembershipService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICommissionService, CommissionService>();
             services.AddScoped<IOrderHandlingService, OrderHandlingService>();
             services.AddSwaggerGen();
         }

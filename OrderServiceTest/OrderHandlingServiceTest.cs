@@ -18,8 +18,10 @@ namespace OrderServiceTest
             string address = null;
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null, commissionServiceMock.Object);
             sut.PlaceOrder(order);
             // TODO: we have a similar pattern in the following tests - refactor the above lines into a test helper class
 
@@ -39,8 +41,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we did not create a packing slip
@@ -56,8 +60,10 @@ namespace OrderServiceTest
             string address = null;
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we created 2 packing slips
@@ -75,8 +81,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we activated a membership
@@ -91,8 +99,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we activated a membership
@@ -107,8 +117,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we sent an email
@@ -122,8 +134,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we sent an email
@@ -141,8 +155,10 @@ namespace OrderServiceTest
             membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
             Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
             emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
             sut.PlaceOrder(order);
 
             // verify we added special instructions to add the first aid video
@@ -152,12 +168,42 @@ namespace OrderServiceTest
         [TestMethod]
         public void PhysicalProduct_CommissionPaymentCreated()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.Unspecified };
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
+            sut.PlaceOrder(order);
+
+            // verify we created a commission payment
+            commissionServiceMock.Verify(m => m.CreateCommissionPayment(It.IsAny<Order>()), Times.Once);
         }
         [TestMethod]
         public void Book_CommissionPaymentCreated()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.Book};
+            Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
+            packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.UpgradeMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+            Mock<ICommissionService> commissionServiceMock = new Mock<ICommissionService>(MockBehavior.Strict);
+            commissionServiceMock.Setup(m => m.CreateCommissionPayment(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, membershipServiceMock.Object, emailServiceMock.Object, commissionServiceMock.Object);
+            sut.PlaceOrder(order);
+
+            // verify we created a commission payment
+            commissionServiceMock.Verify(m => m.CreateCommissionPayment(It.IsAny<Order>()), Times.Once);
         }
+
+        // TODO: what about Video? maybe needs commission payment too
     }
 }

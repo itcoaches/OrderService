@@ -10,14 +10,15 @@ namespace OrderService.Services
         private readonly IPackingSlipService _packingSlipService;
         private readonly IMembershipService _membershipService;
         private readonly IEmailService _emailService;
-
+        private readonly ICommissionService _commissionService;
         private List<Action<Order>> _rules = new List<Action<Order>>();
 
-        public OrderHandlingService(IPackingSlipService packingSlipService, IMembershipService membershipService, IEmailService emailService)
+        public OrderHandlingService(IPackingSlipService packingSlipService, IMembershipService membershipService, IEmailService emailService, ICommissionService commissionService)
         {
             _packingSlipService = packingSlipService;
             _membershipService = membershipService;
             _emailService = emailService;
+            _commissionService = commissionService;
 
             AddRules();
         }
