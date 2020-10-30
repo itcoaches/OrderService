@@ -19,7 +19,7 @@ namespace OrderServiceTest
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
             sut.PlaceOrder(order);
             // TODO: we have a similar pattern in the following tests - refactor the above lines into a test helper class
 
@@ -36,7 +36,7 @@ namespace OrderServiceTest
             Order order = new Order { ProductType = ProductType.Membership };
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
             sut.PlaceOrder(order);
 
             // verify we did not create a packing slip
@@ -53,7 +53,7 @@ namespace OrderServiceTest
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>())).Callback<Order, string>((o, a) => address = a);
 
-            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object);
+            OrderHandlingService sut = new OrderHandlingService(packingSlipServiceMock.Object, null, null);
             sut.PlaceOrder(order);
 
             // verify we created 2 packing slips
