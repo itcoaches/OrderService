@@ -36,6 +36,7 @@ namespace OrderService.Services
             _rules.Add((Order o) => { if (o.ProductType == ProductType.Membership) _emailService.SendEmail(o); });
             _rules.Add((Order o) => { if (o.ProductType == ProductType.MembershipUpgrade) _membershipService.UpgradeMembership(o); });
             _rules.Add((Order o) => { if (o.ProductType == ProductType.MembershipUpgrade) _emailService.SendEmail(o); });
+            _rules.Add((Order o) => { if ((o.ProductType == ProductType.Video) && (o.ProductName.Equals("Learning To Ski", StringComparison.CurrentCultureIgnoreCase))) o.SpecialInstructions += "Remember to add the First Aid video"; });
         }
     }
 }

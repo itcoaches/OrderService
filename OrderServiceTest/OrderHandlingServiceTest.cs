@@ -133,7 +133,7 @@ namespace OrderServiceTest
         [TestMethod]
         public void SkiVideo_AddFirstAidVideo()
         {
-            Order order = new Order { ProductType = ProductType.Video, ProductName = "Learning to Ski" };
+            Order order = new Order { ProductType = ProductType.Video, ProductName = "Learning to Ski", SpecialInstructions = string.Empty };
             Mock<IPackingSlipService> packingSlipServiceMock = new Mock<IPackingSlipService>(MockBehavior.Strict);
             string specialInstructions = "Remember to add the First Aid video";
             packingSlipServiceMock.Setup(m => m.GeneratePackingSlip(It.IsAny<Order>(), It.IsAny<string>()));
@@ -146,7 +146,7 @@ namespace OrderServiceTest
             sut.PlaceOrder(order);
 
             // verify we added special instructions to add the first aid video
-            Assert.AreEqual(specialInstructions, order.SpecialInstructions);
+            Assert.IsTrue(order.SpecialInstructions.Contains(specialInstructions));
         }
         //If the payment is for a physical product or a book, generate a commission payment to the agent.
         [TestMethod]
