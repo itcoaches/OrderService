@@ -92,13 +92,34 @@ namespace OrderServiceTest
         }
         //If the payment is for a membership or upgrade, e-mail the owner and inform them of the activation/upgrade.
         [TestMethod]
-        public void MembershipPayment_EmailOwner()
+        public void MembershipNew_EmailOwner()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.Membership };
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            sut.PlaceOrder(order);
+
+            // verify we sent an email
+            emailServiceMock.Verify(m => m.SendEmail(It.IsAny<Order>()), Times.Once);
         }
+        [TestMethod]
         public void MembershipUpgrade_EmailOwner()
         {
-            Assert.Inconclusive();
+            Order order = new Order { ProductType = ProductType.MembershipUpgrade };
+            Mock<IMembershipService> membershipServiceMock = new Mock<IMembershipService>(MockBehavior.Strict);
+            membershipServiceMock.Setup(m => m.ActivateMembership(It.IsAny<Order>()));
+            Mock<IEmailService> emailServiceMock = new Mock<IEmailService>(MockBehavior.Strict);
+            emailServiceMock.Setup(m => m.SendEmail(It.IsAny<Order>()));
+
+            OrderHandlingService sut = new OrderHandlingService(null, membershipServiceMock.Object, null);
+            sut.PlaceOrder(order);
+
+            // verify we sent an email
+            emailServiceMock.Verify(m => m.SendEmail(It.IsAny<Order>()), Times.Once);
         }
         //If the payment is for the video “Learning to Ski,” add a free “First Aid” video to the packing slip (the result of a court decision in 1997).
         [TestMethod]
